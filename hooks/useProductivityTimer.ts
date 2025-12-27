@@ -120,20 +120,7 @@ export function useProductivityTimer({ userId }: UseProductivityTimerProps) {
         };
     }, [status, startTime, stopTimer]);
 
-    // Failsafe 2: Visibility Change
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.hidden && status === 'running') {
-                console.warn('Tab hidden, stopping timer.');
-                stopTimer('aborted');
-            }
-        };
 
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        };
-    }, [status, stopTimer]);
 
     return {
         status,
