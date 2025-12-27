@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useProductivityTimer } from '@/hooks/useProductivityTimer';
+import { useTimer } from '@/context/TimerContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
-import { Play, Square, AlertCircle } from 'lucide-react';
+import { Play, Square, AlertCircle, Pause } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 interface TimerProps {
@@ -12,7 +12,7 @@ interface TimerProps {
 }
 
 export function Timer({ userId }: TimerProps) {
-    const { status, elapsed, startTimer, stopTimer } = useProductivityTimer({ userId });
+    const { status, elapsed, startTimer, stopTimer, pauseTimer, resumeTimer } = useTimer();
     const [activityName, setActivityName] = useState('');
 
     // Format ms to HH:MM:SS
@@ -45,7 +45,11 @@ export function Timer({ userId }: TimerProps) {
             <CardContent className="space-y-4">
                 {status === 'running' ? (
                     <div className="text-center">
-                        <p className="text-lg font-medium text-primary animate-pulse">Running: {activityName}</p>
+                        <p className="text-lg font-medium text-primary animate-pulse">Running</p>
+                    </div>
+                ) : status === 'paused' ? (
+                    <div className="text-center">
+                        <p className="text-lg font-medium text-yellow-500">Paused (Sleep Detected)</p>
                     </div>
                 ) : (
                     <Input
@@ -57,8 +61,17 @@ export function Timer({ userId }: TimerProps) {
             </CardContent>
             <CardFooter className="flex justify-center space-x-4">
                 {status === 'running' ? (
-                    <Button variant="destructive" size="lg" onClick={handleStop} className="w-full">
-                        <Square className="mr-2 h-4 w-4" /> Stop
+                    <>
+                        <Button variant="outline" size="lg" onClick={() => pauseTimer()} className="w-1/2">
+                            <Pause className="mr-2 h-4 w-4" /> Pause
+                        </Button>
+                        <Button variant="destructive" size="lg" onClick={handleStop} className="w-1/2">
+                            <Square className="mr-2 h-4 w-4" /> Stop
+                        </Button>
+                    </>
+                ) : status === 'paused' ? (
+                    <Button size="lg" onClick={() => resumeTimer()} className="w-full">
+                        <Play className="mr-2 h-4 w-4" /> Resume
                     </Button>
                 ) : (
                     <Button size="lg" onClick={handleStart} disabled={!activityName.trim()} className="w-full">
@@ -68,7 +81,7 @@ export function Timer({ userId }: TimerProps) {
             </CardFooter>
             {status === 'aborted' && (
                 <div className="px-6 pb-4 text-center text-destructive text-sm flex items-center justify-center">
-                    <AlertCircle className="w-4 h-4 mr-1" /> Timer auto-stopped (sleep/inactive).
+                    <AlertCircle className="w-4 h-4 mr-1" /> Timer aborted unexpectedly.
                 </div>
             )}
         </Card>

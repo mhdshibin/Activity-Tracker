@@ -8,6 +8,7 @@ import { startOfDay, endOfDay } from 'date-fns'; // We'll assume date-fns is ins
 interface Entry {
     id: string;
     content: string;
+    description: string | null;
     mood: string | null;
     created_at: string;
 }
@@ -71,6 +72,9 @@ export function EntryList({ userId, refreshKey }: EntryListProps) {
                                 {new Date(entry.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                         </div>
+                        {entry.description && (
+                            <p className="mt-2 text-sm text-foreground/90 whitespace-pre-wrap">{entry.description}</p>
+                        )}
                         {entry.mood && (
                             <p className="mt-2 text-xs text-muted-foreground">Mood: {entry.mood}</p>
                         )}

@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
+import { Textarea } from '@/components/ui/textarea';
+
 interface EntryFormProps {
     userId: string;
     onEntryAdded: () => void;
@@ -15,6 +17,7 @@ interface EntryFormProps {
 
 export function EntryForm({ userId, onEntryAdded }: EntryFormProps) {
     const [content, setContent] = useState('');
+    const [description, setDescription] = useState('');
     const [mood, setMood] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -28,6 +31,7 @@ export function EntryForm({ userId, onEntryAdded }: EntryFormProps) {
             .insert({
                 user_id: userId,
                 content: content,
+                description: description || null,
                 mood: mood || null,
             });
 
@@ -38,6 +42,7 @@ export function EntryForm({ userId, onEntryAdded }: EntryFormProps) {
             alert('Failed to add entry.');
         } else {
             setContent('');
+            setDescription('');
             setMood('');
             onEntryAdded();
         }
@@ -51,14 +56,25 @@ export function EntryForm({ userId, onEntryAdded }: EntryFormProps) {
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid w-full gap-1.5">
-                        <Label htmlFor="content">Today's Log</Label>
+                        <Label htmlFor="content">Headline / Title</Label>
                         <Input
                             id="content"
-                            placeholder="What did you achieve today?"
+                            placeholder="Checking off the main goal..."
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                         />
                     </div>
+
+                    <div className="grid w-full gap-1.5">
+                        <Label htmlFor="description">Description (Optional)</Label>
+                        <Textarea
+                            id="description"
+                            placeholder="Add more details about your day..."
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </div>
+
                     <div className="grid w-full gap-1.5">
                         <Label htmlFor="mood">Mood (Optional)</Label>
                         <Input
