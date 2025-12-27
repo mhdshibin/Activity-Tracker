@@ -120,17 +120,18 @@ export default function SummaryPage() {
     }, {} as Record<string, number>);
 
     return (
-        <div className="min-h-screen bg-background p-8">
+        <div className="min-h-screen bg-background text-foreground p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-6">
                 {/* Header & Controls */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <Link href="/dashboard">
-                            <Button variant="ghost" size="sm" className="mb-2 pl-0 hover:pl-2 transition-all">
+                            <Button variant="ghost" size="sm" className="mb-2 pl-0 hover:pl-2 transition-all text-muted-foreground hover:text-foreground">
                                 <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
                             </Button>
                         </Link>
-                        <h1 className="text-3xl font-bold">Productivity Summary</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">Productivity Summary</h1>
+                        <p className="text-muted-foreground">Weekly and monthly insights.</p>
                     </div>
 
                     <div className="flex items-center gap-2 bg-card border rounded-lg p-1">

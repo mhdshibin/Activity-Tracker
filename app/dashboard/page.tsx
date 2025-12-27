@@ -56,48 +56,60 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="min-h-screen bg-background p-8">
-            <div className="max-w-4xl mx-auto space-y-8">
-                <header className="mb-8 flex justify-between items-center">
-                    <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Daily Productivity Log</h1>
-                        <p className="text-muted-foreground">Track your work and reflection.</p>
-                    </div>
-                    <Button variant="outline" onClick={handleSignOut}>
+        <div className="min-h-screen bg-background text-foreground">
+            {/* Minimal Header */}
+            <header className="border-b bg-card px-6 py-3 flex justify-between items-center sticky top-0 z-10 h-14">
+                <div className="flex items-center gap-2">
+                    <div className="h-6 w-6 bg-primary rounded-full" />
+                    <h1 className="text-lg font-bold tracking-tight">Activity Tracker</h1>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className="text-sm text-muted-foreground hidden md:inline-block">Welcome back</span>
+                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground hover:text-foreground">
                         Sign Out
                     </Button>
-                </header>
+                </div>
+            </header>
 
-                <div className="grid gap-4 md:grid-cols-3 mb-8">
-                    <section>
+            <main className="max-w-7xl mx-auto p-4 md:p-6 grid md:grid-cols-[320px_1fr] gap-6 items-start">
+
+                {/* Left Sidebar: Timer & Navigation */}
+                <div className="space-y-6 md:sticky md:top-20">
+                    <section className="bg-card rounded-xl border shadow-sm p-1">
                         <Timer userId={userId} />
                     </section>
-                    <Link href="/dashboard/projects">
-                        <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm h-full flex flex-col justify-center items-center hover:bg-accent/50 transition-colors cursor-pointer group">
-                            <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">Manage Projects</h3>
-                            <p className="text-sm text-muted-foreground text-center">Set objectives and track progress</p>
-                        </div>
-                    </Link>
-                    <Link href="/dashboard/summary">
-                        <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm h-full flex flex-col justify-center items-center hover:bg-accent/50 transition-colors cursor-pointer group">
-                            <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">View Summary</h3>
-                            <p className="text-sm text-muted-foreground text-center">Weekly & Monthly Insights</p>
-                        </div>
-                    </Link>
+
+                    <nav className="grid gap-2">
+                        <Link href="/dashboard/projects" className="block">
+                            <div className="p-4 rounded-xl border bg-card hover:bg-accent/50 hover:border-primary/50 transition-all cursor-pointer group">
+                                <h3 className="font-semibold group-hover:text-primary transition-colors">Projects</h3>
+                                <p className="text-xs text-muted-foreground">Manage objectives</p>
+                            </div>
+                        </Link>
+                        <Link href="/dashboard/summary" className="block">
+                            <div className="p-4 rounded-xl border bg-card hover:bg-accent/50 hover:border-primary/50 transition-all cursor-pointer group">
+                                <h3 className="font-semibold group-hover:text-primary transition-colors">Summary</h3>
+                                <p className="text-xs text-muted-foreground">View insights</p>
+                            </div>
+                        </Link>
+                    </nav>
                 </div>
 
-                <div className="grid gap-8 md:grid-cols-2">
+                {/* Main Content: Feed */}
+                <div className="space-y-6">
                     <section>
-                        <h2 className="text-xl font-semibold mb-4">New Entry</h2>
                         <EntryForm userId={userId} onEntryAdded={handleEntryAdded} />
                     </section>
 
-                    <section>
-                        <h2 className="text-xl font-semibold mb-4">Today's Entries</h2>
+                    <section className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-semibold tracking-tight">Today's Log</h2>
+                            <span className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">Live Feed</span>
+                        </div>
                         <EntryList userId={userId} refreshKey={refreshKey} />
                     </section>
                 </div>
-            </div>
+            </main>
         </div>
     );
 }

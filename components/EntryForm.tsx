@@ -19,6 +19,7 @@ export function EntryForm({ userId, onEntryAdded }: EntryFormProps) {
     const [content, setContent] = useState('');
     const [description, setDescription] = useState('');
     const [mood, setMood] = useState('');
+    const [isExpanded, setIsExpanded] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -44,50 +45,65 @@ export function EntryForm({ userId, onEntryAdded }: EntryFormProps) {
             setContent('');
             setDescription('');
             setMood('');
+            setIsExpanded(false); // Collapse on success
             onEntryAdded();
         }
     };
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>New Entry</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <Card className="border-2 border-dashed shadow-none hover:border-primary/20 transition-colors bg-card/50">
+            <CardContent className="p-4">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid w-full gap-1.5">
-                        <Label htmlFor="content">Headline / Title</Label>
+                    <div className="space-y-1.5 ">
+                        {!isExpanded && (
+                            <Label htmlFor="content" className="sr-only">Headline</Label>
+                        )}
                         <Input
                             id="content"
-                            placeholder="Checking off the main goal..."
+                            placeholder={isExpanded ? "Checking off the main goal..." : "Checking off the main goal... (Click to expand)"}
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
+                            onFocus={() => setIsExpanded(true)}
+                            className="border-0 shadow-none bg-transparent text-lg font-medium placeholder:text-muted-foreground/50 focus-visible:ring-0 px-0 rounded-none border-b border-transparent focus:border-border transition-colors h-auto py-2"
                         />
                     </div>
 
-                    <div className="grid w-full gap-1.5">
-                        <Label htmlFor="description">Description (Optional)</Label>
-                        <Textarea
-                            id="description"
-                            placeholder="Add more details about your day..."
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </div>
+                    {isExpanded && (
+                        <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="grid w-full gap-1.5">
+                                <Label htmlFor="description" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Description</Label>
+                                <Textarea
+                                    id="description"
+                                    placeholder="Add more details about your day..."
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    className="min-h-[100px] resize-none"
+                                />
+                            </div>
 
-                    <div className="grid w-full gap-1.5">
-                        <Label htmlFor="mood">Mood (Optional)</Label>
-                        <Input
-                            id="mood"
-                            placeholder="e.g., Productive, Tired"
-                            value={mood}
-                            onChange={(e) => setMood(e.target.value)}
-                        />
-                    </div>
-                    <Button type="submit" disabled={isSubmitting || !content.trim()}>
-                        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Save Entry
-                    </Button>
+                            <div className="flex items-end gap-3 justify-between">
+                                <div className="grid w-full max-w-xs gap-1.5">
+                                    <Label htmlFor="mood" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Mood</Label>
+                                    <Input
+                                        id="mood"
+                                        placeholder="Mood tag"
+                                        value={mood}
+                                        onChange={(e) => setMood(e.target.value)}
+                                        className="h-8"
+                                    />
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button type="button" variant="ghost" size="sm" onClick={() => setIsExpanded(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button type="submit" size="sm" disabled={isSubmitting || !content.trim()}>
+                                        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                        Post
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </form>
             </CardContent>
         </Card>

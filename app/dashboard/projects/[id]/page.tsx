@@ -87,16 +87,16 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
     };
 
     return (
-        <div className="min-h-screen bg-background p-8 pb-32">
-            <div className="max-w-4xl mx-auto">
-                <div className="mb-6">
+        <div className="min-h-screen bg-background text-foreground p-6 md:p-8 pb-32">
+            <div className="max-w-5xl mx-auto space-y-6">
+                <div>
                     <Link href="/dashboard/projects">
-                        <Button variant="ghost" size="sm" className="mb-2 pl-0 hover:pl-2 transition-all">
+                        <Button variant="ghost" size="sm" className="mb-2 pl-0 hover:pl-2 transition-all text-muted-foreground hover:text-foreground">
                             <ArrowLeft className="h-4 w-4 mr-2" /> Back to Projects
                         </Button>
                     </Link>
                     <div className="flex justify-between items-start">
-                        <h1 className="text-3xl font-bold">{project.name}</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">{project.name}</h1>
                         <Button variant="ghost" size="sm" onClick={() => {
                             setNewDesc(project.description || '');
                             setIsEditingDesc(!isEditingDesc);
@@ -106,18 +106,20 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                     </div>
 
                     {isEditingDesc ? (
-                        <div className="mt-2 space-y-2">
+                        <div className="mt-2 space-y-2 max-w-2xl">
                             <textarea
-                                className="w-full p-2 rounded border bg-background text-sm"
+                                className="w-full p-2 rounded border bg-background text-sm focus:ring-1 focus:ring-primary outline-none"
                                 rows={3}
                                 value={newDesc}
                                 onChange={(e) => setNewDesc(e.target.value)}
                                 placeholder="Add a description..."
                             />
-                            <Button size="sm" onClick={saveDescription}>Save</Button>
+                            <div className="flex justify-end gap-2">
+                                <Button size="sm" onClick={saveDescription}>Save Description</Button>
+                            </div>
                         </div>
                     ) : (
-                        <p className="text-muted-foreground mt-1 cursor-pointer hover:text-foreground transition-colors" onClick={() => {
+                        <p className="text-muted-foreground mt-1 cursor-pointer hover:text-foreground transition-colors max-w-2xl" onClick={() => {
                             setNewDesc(project.description || '');
                             setIsEditingDesc(true);
                         }}>
