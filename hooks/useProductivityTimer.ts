@@ -98,6 +98,13 @@ export function useProductivityTimer({ userId }: UseProductivityTimerProps) {
                         setElapsed(currentElapsed);
                         setStatus('running');
                         lastTickRef.current = now;
+
+                        // IMPORTANT: Update heartbeat immediately to prevent staleness drift
+                        // otherwise next heartbeat is 60s from now, but DB is already old
+                        await supabase
+                            .from('work_logs')
+                            .update({ last_heartbeat: new Date().toISOString() })
+                            .eq('id', activeLog.id);
                     }
                 }
             }

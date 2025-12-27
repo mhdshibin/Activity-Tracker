@@ -5,6 +5,7 @@ import { supabase } from '@/utils/supabase/client';
 import { Timer } from '@/components/Timer';
 import { EntryForm } from '@/components/EntryForm';
 import { EntryList } from '@/components/EntryList';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { AuthForm } from '@/components/AuthForm';
 import Link from 'next/link';
@@ -41,6 +42,11 @@ export default function DashboardPage() {
         setRefreshKey(prev => prev + 1);
     };
 
+    const handleSignOut = async () => {
+        await supabase.auth.signOut();
+        setUserId(null); // Force immediate UI update
+    };
+
     if (loading) {
         return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
     }
@@ -52,9 +58,14 @@ export default function DashboardPage() {
     return (
         <div className="min-h-screen bg-background p-8">
             <div className="max-w-4xl mx-auto space-y-8">
-                <header className="mb-8">
-                    <h1 className="text-3xl font-bold tracking-tight">Daily Productivity Log</h1>
-                    <p className="text-muted-foreground">Track your work and reflection.</p>
+                <header className="mb-8 flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight">Daily Productivity Log</h1>
+                        <p className="text-muted-foreground">Track your work and reflection.</p>
+                    </div>
+                    <Button variant="outline" onClick={handleSignOut}>
+                        Sign Out
+                    </Button>
                 </header>
 
                 <div className="grid gap-4 md:grid-cols-3 mb-8">
