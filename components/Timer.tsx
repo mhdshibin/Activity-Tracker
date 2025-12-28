@@ -1,19 +1,45 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTimer } from '@/context/TimerContext';
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
-import { Play, Square, AlertCircle, Pause } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { supabase } from '@/utils/supabase/client';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Play, Pause, Square, AlertCircle } from 'lucide-react';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 interface TimerProps {
     userId: string;
 }
 
+interface ProjectOption {
+    id: string;
+    name: string;
+}
+
 export function Timer({ userId }: TimerProps) {
     const { status, elapsed, startTimer, stopTimer, pauseTimer, resumeTimer } = useTimer();
     const [activityName, setActivityName] = useState('');
+    const [projectId, setProjectId] = useState<string>('none');
+    const [projects, setProjects] = useState<ProjectOption[]>([]);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const { data } = await supabase
+                .from('projects')
+                .select('id, name')
+                .eq('user_id', userId)
+                .neq('status', 'archived') // Only show active/completed
+                .order('name');
+            if (data) setProjects(data);
+        };
+        fetchProjects();
+    }, [userId]);
 
     // Format ms to HH:MM:SS
     const formatTime = (ms: number) => {
@@ -27,12 +53,14 @@ export function Timer({ userId }: TimerProps) {
 
     const handleStart = () => {
         if (!activityName.trim()) return;
-        startTimer(activityName);
+        const pid = projectId === 'none' ? undefined : projectId;
+        startTimer(activityName, pid);
     };
 
     const handleStop = () => {
         stopTimer('completed');
         setActivityName('');
+        setProjectId('none');
     };
 
     return (
@@ -44,19 +72,34 @@ export function Timer({ userId }: TimerProps) {
             </CardHeader>
             <CardContent className="space-y-4">
                 {status === 'running' ? (
-                    <div className="text-center">
+                    <div className="text-center space-y-2">
                         <p className="text-lg font-medium text-primary animate-pulse">Running</p>
+                        {/* Optional: Show current project name if we stored it in context/hook, 
+                            but for now just showing status is fine or minimal info. */}
                     </div>
                 ) : status === 'paused' ? (
                     <div className="text-center">
                         <p className="text-lg font-medium text-yellow-500">Paused (Sleep Detected)</p>
                     </div>
                 ) : (
-                    <Input
-                        placeholder="What are you working on?"
-                        value={activityName}
-                        onChange={(e) => setActivityName(e.target.value)}
-                    />
+                    <div className="space-y-3">
+                        <Select value={projectId} onValueChange={setProjectId}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Project (Optional)" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="none">No Project</SelectItem>
+                                {projects.map(p => (
+                                    <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Input
+                            placeholder="What are you working on?"
+                            value={activityName}
+                            onChange={(e) => setActivityName(e.target.value)}
+                        />
+                    </div>
                 )}
             </CardContent>
             <CardFooter className="flex justify-center space-x-4">

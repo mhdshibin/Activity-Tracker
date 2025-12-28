@@ -15,6 +15,7 @@ import {
     CardFooter
 } from '@/components/ui/card';
 import { Loader2, Plus, Folder, ArrowRight, ArrowLeft } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import Link from 'next/link';
 
 export default function ProjectsPage() {
@@ -81,6 +82,9 @@ export default function ProjectsPage() {
                         </Link>
                         <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
                         <p className="text-muted-foreground">Manage your objectives and goals.</p>
+                    </div>
+                    <div className="self-end md:self-center">
+                        <ThemeToggle />
                     </div>
                 </div>
 

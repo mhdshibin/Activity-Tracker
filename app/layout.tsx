@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google"; // Using a default font
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeSync } from "@/components/ThemeSync";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -18,13 +20,20 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                suppressHydrationWarning
                 className={cn(
                     "min-h-screen bg-background font-sans antialiased",
                     inter.variable
                 )}
             >
-                {children}
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <ThemeSync />
+                    {children}
+                </ThemeProvider>
             </body>
         </html>
     );

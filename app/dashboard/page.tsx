@@ -6,6 +6,7 @@ import { Timer } from '@/components/Timer';
 import { EntryForm } from '@/components/EntryForm';
 import { EntryList } from '@/components/EntryList';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useRouter } from 'next/navigation';
 import { AuthForm } from '@/components/AuthForm';
 import Link from 'next/link';
@@ -65,6 +66,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="text-sm text-muted-foreground hidden md:inline-block">Welcome back</span>
+                    <ThemeToggle />
                     <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground hover:text-foreground">
                         Sign Out
                     </Button>

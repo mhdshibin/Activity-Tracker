@@ -136,7 +136,7 @@ export function useProductivityTimer({ userId }: UseProductivityTimerProps) {
         setLogId(null);
     }, [logId]);
 
-    const startTimer = useCallback(async (activityName: string) => {
+    const startTimer = useCallback(async (activityName: string, projectId?: string) => {
         if (!userId) return;
 
         // Safety: Ensure no other open sessions exist (Close them if found) by STATUS
@@ -152,6 +152,7 @@ export function useProductivityTimer({ userId }: UseProductivityTimerProps) {
             .insert({
                 user_id: userId,
                 activity_name: activityName,
+                project_id: projectId || null,
                 start_time: now.toISOString(),
                 status: 'running',
                 last_heartbeat: now.toISOString(),

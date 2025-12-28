@@ -6,6 +6,7 @@ import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, format, parseISO, isS
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2, Calendar as CalendarIcon, ArrowLeft } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -134,21 +135,24 @@ export default function SummaryPage() {
                         <p className="text-muted-foreground">Weekly and monthly insights.</p>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-card border rounded-lg p-1">
-                        <Button
-                            variant={viewMode === 'week' ? 'default' : 'ghost'}
-                            size="sm"
-                            onClick={() => setViewMode('week')}
-                        >
-                            Weekly
-                        </Button>
-                        <Button
-                            variant={viewMode === 'month' ? 'default' : 'ghost'}
-                            size="sm"
-                            onClick={() => setViewMode('month')}
-                        >
-                            Monthly
-                        </Button>
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 bg-card border rounded-lg p-1">
+                            <Button
+                                variant={viewMode === 'week' ? 'default' : 'ghost'}
+                                size="sm"
+                                onClick={() => setViewMode('week')}
+                            >
+                                Weekly
+                            </Button>
+                            <Button
+                                variant={viewMode === 'month' ? 'default' : 'ghost'}
+                                size="sm"
+                                onClick={() => setViewMode('month')}
+                            >
+                                Monthly
+                            </Button>
+                        </div>
+                        <ThemeToggle />
                     </div>
                 </div>
 

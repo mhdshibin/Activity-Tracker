@@ -114,7 +114,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
                 <Check className="h-4 w-4" />
             </DropdownMenuPrimitive.ItemIndicator>
         </span>
-        {props.children}
+        {children}
     </DropdownMenuPrimitive.CheckboxItem>
 ))
 DropdownMenuCheckboxItem.displayName =
@@ -137,7 +137,7 @@ const DropdownMenuRadioItem = React.forwardRef<
                 <Circle className="h-2 w-2 fill-current" />
             </DropdownMenuPrimitive.ItemIndicator>
         </span>
-        {props.children}
+        {children}
     </DropdownMenuPrimitive.RadioItem>
 ))
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName

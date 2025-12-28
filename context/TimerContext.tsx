@@ -7,7 +7,7 @@ import { supabase } from '@/utils/supabase/client';
 interface TimerContextType {
     status: TimerStatus;
     elapsed: number;
-    startTimer: (activityName: string) => Promise<void>;
+    startTimer: (activityName: string, projectId?: string) => Promise<void>;
     stopTimer: (finalStatus: 'completed' | 'aborted') => Promise<void>;
     pauseTimer: () => Promise<void>;
     resumeTimer: () => Promise<void>;
